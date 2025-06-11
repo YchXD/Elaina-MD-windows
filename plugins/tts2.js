@@ -1,13 +1,7 @@
 /**I stole this code, so you can steal it too 😆**/
 
 let fetch = require("node-fetch");
-let handler = async (m, {
-    conn,
-    isOwner,
-    usedPrefix,
-    command,
-    args
-}) => {
+let handler = async (m, { conn, isOwner, usedPrefix, command, args }) => {
     const lister = [
     "Adult Female #1, American English (TruVoice)",
     "Adult Female #2, American English (TruVoice)",
@@ -55,7 +49,7 @@ const [atas, bawah, kiri, kanan] = text.split("|");
 if (!atas || !bawah) {
     return m.reply(query);
 }
-await m.reply(status.wait + "\n" + lister[atas - 1])
+await m.reply(global.wait + "\n" + lister[atas - 1])
 try {
     const res = await SayTTS(lister[atas - 1], bawah, kiri || 140, kanan || 157);
     if (res) {

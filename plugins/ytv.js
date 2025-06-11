@@ -76,7 +76,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) throw `Masukan URL!\n\ncontoh:\n${usedPrefix + command} https://youtu.be/4rDOsvzTicY?si=3Ps-SJyRGzMa83QT`;    
   
         if (!text) throw 'masukan link youtube';   
-        m.reply(wait);      
+        m.reply(wait);   
+    try {
         const response = await axios.get(`https://api.betabotz.eu.org/api/download/ytmp4?url=${text}&apikey=Btz-KiyoEditz`);        
         const res = response.data.result;      
         var { mp4, id, title, source, duration, thumb } = res;
@@ -96,10 +97,40 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             mimetype: 'video/mp4',
             fileName: `${title}.mp4`
         }, { quoted: m });
-   
+    } catch (e) {
+    console.log(e);
+    m.reply(`*Error:* ${e.message}`);
+    m.reply(`*Mencoba matode lain!...*`);
+    try {
+      const response = await axios.get(`https://ab-ytdlv2.abrahamdw882.workers.dev/?url=${text}&&format=720`);        
+        const res = response.data.data;      
+        var { downloadUrl, id, title, image } = res;
+        let capt = `╭──── 〔YTMP4〕 ─⬣\n`;
+        capt += ` ⬡ *id* : ${id}\n`;
+        capt += ` ⬡  *tittle* : ${title}\n`;
+        capt += ` ⬡  *source* : ${text}\n`;
+        capt += ` ⬡  *duration* : null\n`;
+        capt += `╰────────⬣\n`;    
+        capt += `Ab.tech.api`;    
+        await conn.sendMessage(m.chat, { 
+        image: { url: image }, 
+        caption: capt
+    }, { quoted: m });
+        // await conn.sendFile(m.chat, mp4, null, capt, m);
+        await conn.sendMessage(m.chat, { 
+            document: { url: downloadUrl }, 
+            mimetype: 'video/mp4',
+            fileName: `${title}.mp4`
+        }, { quoted: m });
+     } catch (e) {
+         console.log(e);
+    m.reply(`*Error:* ${e.message}`);
+    m.reply(`*Semua metode gagal, harap lapor owner!...*`);
+     }
+    }
 };
 handler.help = ['ytmp4'];
-handler.command = /^(ytmp4)$/i
+handler.command = /^y(ou)?t(ube)?(v|mp4)?$/i
 handler.tags = ['downloader'];
 handler.limit = true;
 handler.group = false;

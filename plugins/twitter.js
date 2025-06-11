@@ -1,81 +1,70 @@
 const axios = require('axios');
-
-async function xdk(url) {
-    try {
-        const res = await axios.post(
-            'https://contentstudio.io/.netlify/functions/facebookdownloaderapi',
-            { url },
-            {
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36',
-                    'Referer': 'https://contentstudio.io/tools/x-twitter-video-downloader',
-                }
-            }
-        );
-
-        return res.data;
-    } catch (error) {
-        return { error: 'Gagal' };
-    }
-}
+const cheerio = require('cheerio');
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) return m.reply(`Masukkan URL X (Twitter)\n\n*Example :* ${usedPrefix}${command} https://x.com/elonmusk/status/1901663707190419744`);
+    if (!args[0]) {
+        return m.reply(`Masukkan URL X (Twitter)\n\n*Contoh:* ${usedPrefix}${command} https://x.com/elonmusk/status/1901663707190419744`);
+    }
 
     const regex = /^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]+\/status\/\d+/;
     if (!regex.test(args[0])) {
-        return m.reply('Berikan URL dari X yang ingin di-download.');
+        return m.reply('Berikan URL dari X (Twitter) yang valid.');
     }
 
-    m.reply('*Please Wait...*');
+    m.reply('*Tunggu sebentar, sedang memproses...*');
 
     try {
-        const result = await xdk(args[0]);
-m.reply(JSON.stringify(result, null, 2));
-        if (result.error) {
-            return m.reply('Gagal mengunduh media. Pastikan URL valid dan dapat diakses.');
+        const res = await axios.post('https://twmate.com/', new URLSearchParams({
+            page: args[0],
+            ftype: 'all',
+            ajax: '1'
+        }), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Accept': '*/*',
+                'X-Requested-With': 'XMLHttpRequest',
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36',
+                'Referer': 'https://twmate.com/',
+            }
+        });
+
+        const $ = cheerio.load(res.data);
+        const videoLinks = [];
+        $('.btn-dl').each((index, element) => {
+            const quality = $(element).parent().prev().text().trim();
+            const downloadUrl = $(element).attr('href');
+            if (downloadUrl.includes('.mp4')) {
+                videoLinks.push({ quality, downloadUrl });
+            }
+        });
+
+        if (videoLinks.length === 0) {
+            return m.reply('Gagal mengambil video. Pastikan URL benar dan video bersifat publik.');
         }
 
-        let mediaSent = false;
+        const best = videoLinks[0];
+        let caption = `*Download Twitter/X*\n\n`;
+        caption += `*Quality:* ${best.quality}\n`;
+        caption += `*Source:* ${args[0]}\n\n`;
+        caption += `*Link Alternatif:*\n`;
+        videoLinks.forEach((v, i) => {
+            caption += `${i + 1}. ${v.quality}: ${v.downloadUrl}\n`;
+        });
 
-        if (result.medias && result.medias.length > 0) {
-            for (const media of result.medias) {
-                if (media.url) {
-                    const isImage = media.type === 'photo' || /\.(jpg|jpeg|png|webp)$/i.test(media.url);
+        await conn.sendMessage(m.chat, {
+            video: { url: best.downloadUrl },
+            caption: caption.trim()
+        }, { quoted: m });
 
-                    if (isImage && !mediaSent) {
-                        await conn.sendMessage(m.chat, { image: { url: media.url } }, { quoted: m });
-                        mediaSent = true;
-                        break;
-                    } else if (!isImage) {
-                        await conn.sendMessage(m.chat, { video: { url: media.url } }, { quoted: m });
-                        mediaSent = true;
-                        break;
-                    }
-                }
-            }
-        } else if (result.url) {
-            const isImage = result.type === 'photo' || /\.(jpg|jpeg|png|webp)$/i.test(result.url);
-
-            if (isImage) {
-                await conn.sendMessage(m.chat, { image: { url: result.url } }, { quoted: m });
-            } else {
-                await conn.sendMessage(m.chat, { video: { url: result.url } }, { quoted: m });
-            }
-        } else {
-            m.reply('Format media tidak didukung atau tidak ditemukan.');
-        }
     } catch (error) {
         console.error(error);
-        m.reply('Gagal Download');
+        m.reply('Terjadi kesalahan saat memproses video.');
     }
 };
 
 handler.help = ['twitter'].map(v => v + ' <url>');
 handler.tags = ['downloader'];
-handler.alias = ['x', 'twitter'];
-handler.command = /^(x|twitter)$/i;
+handler.alias = ['x', 'twitter', 'twdown'];
+handler.command = /^(x|twitter|twdown)$/i;
 
 module.exports = handler;

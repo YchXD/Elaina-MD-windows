@@ -99,16 +99,16 @@ async function fetchBlackboxAI(prompt, callback) {
     const headers = {
         'authority': 'www.blackbox.ai',
         'accept': '*/*',
-        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+        'accept-language': 'd,en-US;q=0.9,en;q=0.8',
         'content-type': 'application/json',
         'origin': 'https://www.blackbox.ai',
         'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Mobile Safari/537.36'
     };
 
     const data = {
-        "messages": [{ "role": "user", "content": prompt, "id": "54lcaEJ" }],
+        "messages": [{ "role": "user", "content": prompt, "id": "xSsUQQp" }],
         "agentMode": {},
-        "id": "RDyqb0u",
+        "id": "xSsUQQp",
         "previewToken": null,
         "userId": null,
         "codeModelMode": true,

@@ -6,13 +6,8 @@ const agent = ytdl.createAgent(JSON.parse(fs.readFileSync("./lib/coklat.json")))
 
 
 const handler = async (m, { args, conn, text, command, usedPrefix }) => {
-  conn.ytmp3 = conn.ytmp3 || {};
-  if (m.sender in conn.ytmp3) {
-    return;
-  }
   if (!text) throw `*Example:* ${usedPrefix + command} https://www.youtube.com/watch?v=Z28dtg_QmFw`
   conn.reply(m.chat, wait, m);
-  conn.ytmp3[m.sender] = true;
   try {
     let info = await ytdl.getInfo(text, {agent});
     let durationSeconds = parseInt(info.videoDetails.lengthSeconds, 10);
@@ -47,7 +42,6 @@ const handler = async (m, { args, conn, text, command, usedPrefix }) => {
        
 conn.sendFile(m.chat, buffer, `${info.videoDetails.title}.mp3`, `*${info.videoDetails.title}*`, m, null, { asDocument: global.db.data.users[m.sender].useDocument });
 ///conn.sendMessage(m.chat, { audio: buffer, mimetype: 'audio/mpeg', fileName: `${info.videoDetails.title}.mp3`, asDocument: global.db.data.users[m.sender].useDocument }, { quoted: m });
-          delete conn.ytmp3[m.sender];
           fs.unlinkSync(inputFilePath);
           fs.unlinkSync(outputFilePath);
         })
@@ -62,7 +56,36 @@ conn.sendFile(m.chat, buffer, `${info.videoDetails.title}.mp3`, `*${info.videoDe
   } catch (e) {
     console.log(e);
     m.reply(`*Error:* ${e.message}`);
+    m.reply(`*Mencoba matode lain!...*/n proses bagian ini agak lama`);
+    try {
+    const response = await axios.get(`https://ab-ytdlv2.abrahamdw882.workers.dev/?url=${text}&format=mp3`);        
+        const res = response.data.data;
+        var { downloadUrl, id, title, image } = res;
+        let caption = `
+╭──── 〔 Y O U T U B E 〕 ─⬣
+ ⬡ *Title:* ${title}
+ ⬡ *Id:* ${id}
+ ⬡ *Duration:* null
+ ⬡ *Link:* ${text}
+ ⬡ *Rating:* unknown
+╰────────⬣`
+    // Mengirim gambar dengan caption
+    await conn.sendMessage(m.chat, { 
+        image: { url: image }, 
+        caption: caption
+    }, { quoted: m });
+    
+        // await conn.sendFile(m.chat, mp3, null, m);
+        await conn.sendMessage(m.chat, { 
+            document: { url: downloadUrl }, 
+            mimetype: 'audio/mpeg',
+            fileName: `${title}.mp3`
+        }, { quoted: m });
+  } catch (e) {
+    console.log(e);
+    m.reply(`*Error:* ${e.message}`);
     m.reply(`*Mencoba matode lain!...*`);
+    try {
     const response = await axios.get(`https://api.betabotz.eu.org/api/download/ytmp3?url=${text}&apikey=Btz-KiyoEditz`);        
         const res = response.data.result;      
         var { mp3, id, title, source, duration, thumb } = res;
@@ -73,7 +96,9 @@ conn.sendFile(m.chat, buffer, `${info.videoDetails.title}.mp3`, `*${info.videoDe
  ⬡ *Duration:* ${duration} 
  ⬡ *Link:* ${source}
  ⬡ *Rating:* unknown
-╰────────⬣`
+╰────────⬣
+Ab.tech.api
+`
     // Mengirim gambar dengan caption
     await conn.sendMessage(m.chat, { 
         image: { url: thumb }, 
@@ -86,6 +111,12 @@ conn.sendFile(m.chat, buffer, `${info.videoDetails.title}.mp3`, `*${info.videoDe
             mimetype: 'audio/mpeg',
             fileName: `${title}.mp3`
         }, { quoted: m });
+    } catch (e) {
+         console.log(e);
+    m.reply(`*Error:* ${e.message}`);
+    m.reply(`*Semua metode gagal, harap lapor owner!...*`);
+    }
+  }
   }
 };
 

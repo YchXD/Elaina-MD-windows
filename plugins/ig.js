@@ -1,91 +1,68 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
-const FormData = require('form-data');
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-async function igdl(url) {
-    try {
-        const { data } = await axios.get('https://snapinst.app/');
-        const $ = cheerio.load(data);
-        const form = new FormData();
-        
-        form.append('url', url);
-        form.append('action', 'post');
-        form.append('lang', '');
-        form.append('cf-turnstile-response', '');
-        form.append('token', $('input[name=token]').attr('value'));
+const handler = async (m, { conn, text }) => {
+   if (!text) return m.reply("Masukkan URL Instagram!\nContoh: ig https://www.instagram.com/p/xxx");
 
-        const headers = {
-            ...form.getHeaders(),
-            'accept': '*/*',
-            'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-            'sec-ch-ua': '"Not A(Brand";v="8", "Chromium";v="132"',
-            'sec-ch-ua-mobile': '?1',
-            'sec-ch-ua-platform': '"Android"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'Referer': 'https://snapinst.app/',
-            'Referrer-Policy': 'strict-origin-when-cross-origin'
-        };
+   try {
+      const igdl = async (url) => {
+         let { data } = await axios.get(`https://snapdownloader.com/tools/instagram-downloader/download?url=${url}`);
+         let $ = cheerio.load(data);
+         const result = [];
 
-        const response = await axios.post('https://snapinst.app/action2.php', form, { headers });
-        const executeJS = new Function('callback', response.data.replace('eval', 'callback'));
+         $(".download-item").each((i, el) => {
+            const type = $(el).find(".type").text().trim().toLowerCase();
+            const url = $(el).find(".btn-download").attr("href");
+            if (url) result.push({ type, url });
+         });
 
-        const html = await new Promise((resolve) => {
-            executeJS((scriptResult) => {
-                const extractedHTML = scriptResult.split(".innerHTML = ")[1].split("; document.")[0];
-                resolve(eval(extractedHTML));
-            });
-        });
+         return result;
+      };
 
-        const parsedHTML = cheerio.load(html);
-        const result = {
-            avatar: parsedHTML('.row img:eq(0)').attr('src'),
-            username: parsedHTML('.row div.left:eq(0)').text().trim(),
-            urls: []
-        };
+      await conn.sendMessage(m.chat, {
+         react: {
+            text: "⏳",
+            key: m.key
+         }
+      });
 
-        parsedHTML('.row .download-item').each((i, e) => {
-            result.urls.push(parsedHTML(e).find('.download-bottom a').attr('href'));
-        });
+      const res = await igdl(text);
+      if (!res.length) return m.reply("Gagal mengambil media.");
 
-        return result;
-    } catch (error) {
-        console.error("Error fetching Instagram media:", error);
-        throw { status: 400, message: "Error fetching media" };
-    }
-}
+      let linkList = res.map((v, i) => `${i + 1}. [${v.type}] ${v.url}`).join('\n');
+      let caption = `Berikut media yang berhasil diunduh:\n\n${linkList}`;
 
-let handler = async (m, { conn, args, usedPrefix, command, text }) => {
-    let inputMessage = `[!] *Wrong Input*\n\nExample: ${usedPrefix + command} https://www.instagram.com/reel/CsC2PQCNgM1/`;
+      for (let i = 0; i < res.length; i++) {
+         let media = res[i];
+         if (media.type === "video") {
+            await conn.sendMessage(m.chat, {
+               video: { url: media.url },
+               caption
+            }, { quoted: m });
+         } else if (media.type === "photo" || media.type === "image") {
+            await conn.sendMessage(m.chat, {
+               image: { url: media.url },
+               caption
+            }, { quoted: m });
+         }
+      }
 
-    if (!text) return m.reply(inputMessage);
+      await conn.sendMessage(m.chat, {
+         react: {
+            text: "✔️",
+            key: m.key
+         }
+      });
 
-    try {
-        const mediaData = await igdl(text);
-m.reply(JSON.stringify(mediaData, null, 2));
-        if (!mediaData.urls.length) throw new Error("No media found");
-
-        await conn.sendMessage(m.chat, { react: { text: '🕐', key: m.key } });
-
-        for (let mediaUrl of mediaData.urls) {
-            await conn.sendFile(m.chat, mediaUrl, '', `乂 *I N S T A G R A M*\n\n*Result*: ${usedPrefix + command}\n*URL*: ${text}`, m, null, {
-                asDocument: global.db.data.users[m.sender]?.useDocument
-            });
-        }
-
-        await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
-
-    } catch (e) {
-        console.error("Download error:", e);
-        await conn.sendMessage(m.chat, { react: { text: '❎', key: m.key } });
-        throw e;
-    }
+   } catch (e) {
+      m.reply("Gagal mengunduh media Instagram!\n\n" + e.message);
+   }
 };
 
-handler.help = ["ig"];
+handler.command = ['igdl', 'ig', 'instagram'];
 handler.tags = ['downloader'];
-handler.command = /^(ig|instagram|igdl)$/i;
-handler.limit = true;
+handler.help = ['ig <url>'];
+handler.premium = false;
+handler.limit = false;
 
 module.exports = handler;
