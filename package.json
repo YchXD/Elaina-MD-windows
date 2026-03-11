@@ -42,7 +42,7 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@adiwajshing/baileys": "npm:@whiskeysockets/baileys@6.7.18",
+        "@adiwajshing/baileys": "npm:@whiskeysockets/baileys@7.0.0-rc.9",
         "@adiwajshing/keyed-db": "^0.2.4",
         "@anthropic-ai/sdk": "^0.32.1",
         "@bochilteam/scraper": "^5.0.1",
