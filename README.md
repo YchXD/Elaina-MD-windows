@@ -1,4 +1,4 @@
-# Elaina-MD
+# Elaina-MD  for Windows
 <p align="center">
     <img src="https://telegra.ph/file/6bcac493fae59b98c7914.png" width="100%" style="margin-left: auto;margin-right: auto;display: block;">
 </p>
@@ -23,51 +23,32 @@
 * gak bakal rajin update di sini, saya pindah ke module ESM, silahkan gunakan versi ke dua nya [`klik disini`](https://github.com/KiyoEditz/Elaina-MD2)
 * bug ajg capek gua bgst, yang gak bisa install pakek yarn install ya ajg, kalok engga chat owner di wa 
 * bot bakal update berkala jika saya menemukan bug atau laporan bug.
-* sc ini selalu di belakang bot yang saya run pribadi, jadi silahkan cek fitur terbaru di nomor [`Klik Disini`](Https://wa.me/kontol)
+* sc ini selalu di belakang bot yang saya run pribadi, jadi silahkan cek fitur terbaru di nomor [`Klik Disini`](https://wa.me/6285874068202)
 
 
-## DEPLOYMENT
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/KiyoEditz/Elaina-MD)
-
-## UNTUK PENGGUNA WINDOWS/VPS/RDP
+## HOW TO RUN
 
 * Unduh & Instal Git [`Klik Disini`](https://git-scm.com/downloads)
 * Unduh & Instal NodeJS [`Klik Disini`](https://nodejs.org/en/download)
 * Unduh & Instal FFmpeg [`Klik Disini`](https://ffmpeg.org/download.html) (**Jangan Lupa Tambahkan FFmpeg ke variabel lingkungan PATH**)
 * Unduh & Instal ImageMagick [`Klik Disini`](https://imagemagick.org/script/download.php)
 
+yarn (recomended)
 ```bash
-git clone https://github.com/KiyoEditz/Elaina-MD.git
-cd Elaina-MD 
-npm install
+npm npm install --global yarn
+git clone https://github.com/YchXD/Elaina-MD-windows.git
+cd Elaina-MD-windows 
+yarn
 node .
 ```
 
----------
-
-## UNTUK PENGGUNA TERMUX
-
-* Download Termux [`Klik Disini`](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk)
-
+npm
+```bash
+git clone https://github.com/YchXD/Elaina-MD-windows.git
+cd Elaina-MD-windows 
+npm install
+node .
 ```
-$ pkg update && upgrade -y
-$ apt update && upgrade -y
-$ pkg install ffmpeg
-$ pkg install nodejs-lts
-$ pkg install git
-$ git clone https://github.com/KiyoEditz/Elaina-MD.git
-$ cd Elaina-MD
-$ npm install
-$ node .
-```
----------
-## UNTUK PENGGUNA HEROKU
-
-### Instal Buildpack
-* heroku/nodejs
-* https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
-* https://github.com/mcollina/heroku-buildpack-imagemagick.git
 
 ---------
 ## Arguments `node . [--options] [<session name>]` 
@@ -164,14 +145,13 @@ conn.logger.level = 'debug'
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
 [![BochilGaming](https://github.com/BochilGaming.png?size=100)](https://github.com/BochilGaming)
 [![syahrularranger](https://github.com/syahrularranger.png?size=100)](https://github.com/syahrularranger)
+[![KiyoEditz](https://github.com/KiyoEditz.png?size=100)](https://github.com/KiyoEditz)
+
+##### Author Asli
+[![KiyoEditz](https://github.com/KiyoEditz.png?size=100)](https://github.com/KiyoEditz)
 
 ##### Penulis Ulang
-[![KiyoEditz](https://github.com/KiyoEditz.png?size=100)](https://github.com/KiyoEditz)
-
-###### Collaborator
-
-[![KiyoEditz](https://github.com/KiyoEditz.png?size=100)](https://github.com/KiyoEditz)
-[![syahrularranger](https://github.com/syahrularranger.png?size=100)](https://github.com/syahrularranger)
+[![KiyoEditz](https://github.com/YchXD.png?size=100)](https://github.com/YchXD)
 
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/KiyoEditz/Elaina-MD.svg?background=%23FFFFFF&axis=%23333333&line=%23e76060)](https://starchart.cc/KiyoEditz/Elaina-MD)
