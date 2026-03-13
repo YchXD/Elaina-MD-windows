@@ -153,5 +153,36 @@ conn.logger.level = 'debug'
 ##### Penulis Ulang
 [![KiyoEditz](https://github.com/YchXD.png?size=100)](https://github.com/YchXD)
 
+## Q&A
+Ganti nomor owner?
+> Buka folder settings didalemnya ada file json bernama 'config.json' lalu edit nomor di dalemnya!
+
+Ganti WM di sticker?
+> Buka folder plugins cari file '__allfake.js', File ini berisi banyak settingan!
+
+Ada error atau apa?
+> Create issue!
+
+Wa saya?
+> Nih chat aja dan gausah spam .. sabar klo ngechat tuh klo gk sabar bkl gak gw bls .. klo sabar pasti akan gw bantu masalah lu!
+
+Nomor WA: 0858-7406-8202
+Link nomor WA: https://wa.me/6285874068202
+
+Sawer?
+> Chat saya aja yah di wa saya itu
+Atau bisa langsung ke ovo/gopay saya nomornya sama nomor wa saya terimakasih 🙏
+
+Reupload? 
+> Minggir dulu deh nnti gw report mampos lu
+
+Mau recode source code?
+> Boleh asal sertakan sumber sc ya!
+
+Udah gitu aja ya sekian terimakasih dan jangan lupa sholat bagi umat islam kalo nonis ya gausah hehe🗿
+
+Terimakasih banyak atas support kalian saya pamit wassalamu'alaikum warahmatullahi wabarakatuh 🙏
+
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/KiyoEditz/Elaina-MD.svg?background=%23FFFFFF&axis=%23333333&line=%23e76060)](https://starchart.cc/KiyoEditz/Elaina-MD)
+

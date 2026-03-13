@@ -2,15 +2,15 @@ let fs = require('fs')
 function pickRandom(list) {
 	return list[Math.floor(list.length * Math.random())]
 }
-global.owner = ['6285874068202','6281999284127'] // Put your number here
+global.owner = ['6287886820365','6285183103656'] // Put your number here
 global.mods = JSON.parse(fs.readFileSync('./src/mods.json')) // Want some help?
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Pengguna premium tidak memerlukan limit // Premium user has unlimited limit
 global.link = JSON.parse(fs.readFileSync('./src/grouplink.json'))
 global.group = link.map((v, i) => `Group ${i + 1}\n${v}`).join('\n\n');
-global.numberowner = '6285874068202'
-global.nameowner = 'KiyoEditz' //Owner name
+global.numberowner = '6287886820365'
+global.nameowner = 'YchXD' //Owner name
 global.name = 'Kiyo•Editz™' // owner name for contacts
-global.namebot = 'Elaina-MD' // bot name 
+global.namebot = 'Ych Botz' // bot name 
 global.mail = 'abiandriansyah3@gmail.com' // email or gmail
 global.instagram = 'https://www.instagram.com/kiyoeditz'//Instagram 
 //global.community = {
@@ -63,7 +63,7 @@ global.set = {
 }
 //global.Func = new (require('./lib/functions')) //just function 
 //global.scrap = new (require('./lib/scrape')) //just scraper 
-global.packname = 'Kiyo•Editz™' // another Watermark 
+global.packname = 'Ych Botz based on' // another Watermark 
 global.author = '⫹⫺ ᴇʟᴀɪɴᴀ 𝙱𝙾𝚃' //watermark author?
 global.htjava = pickRandom(["乂", "❏", "⫹⫺", "⎔", "✦", "⭔", "⬟"])
 global.pmenus = pickRandom(["乂", "◈", "➭", "ଓ", "⟆•", "⳻", "•", "↬", "◈", "⭑", "ᯬ", "◉", "᭻", "»", "〆", "々", "✗", "♪"])

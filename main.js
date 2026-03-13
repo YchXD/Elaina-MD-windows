@@ -6,7 +6,7 @@
         makeInMemoryStore,
         jidNormalizedUser,
         makeCacheableSignalKeyStore,
-        PHONENUMBER_MCC
+        fetchLatestWaWebVersion
     } = require('@whiskeysockets/baileys')
     const readline = require('readline')
     const PHONENUMBER_MCC1 = {
@@ -77,6 +77,8 @@
     global.isInit = !fs.existsSync(authFile)
     const { state, saveState, saveCreds } = await useMultiFileAuthState(authFile)
 
+    const {version, islatest} = await fetchLatestWaWebVersion()
+
     const connectionOptions = {
         markOnlineOnConnect: false,
         generateHighQualityLinkPreview: true,
@@ -85,8 +87,8 @@
             keys: makeCacheableSignalKeyStore(state.keys, P({ level: 'silent' }).child({ level: 'silent' })),
         },
         logger: P({ level: 'silent' }),
-        browser: ['Elaina-MD', 'Safari', '1.0.0'],
-        version: [2, 3000, 1015901307],
+        // browser: ['Elaina-MD', 'Safari', '1.0.0'],
+        // version: [2, 3000, 1025190524],
         printQRInTerminal: opts['pairing'] ? false : true,
         getMessage: async (key) => {
             let jid = jidNormalizedUser(key.remoteJid)
@@ -120,7 +122,7 @@
         }
 
         setTimeout(async () => {
-            let code = await conn.requestPairingCode(phoneNumber)
+            let code = await conn.requestPairingCode(phoneNumber,'KODEOTPP')
             code = code?.match(/.{1,4}/g)?.join("-") || code
             console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
         }, 3000)
